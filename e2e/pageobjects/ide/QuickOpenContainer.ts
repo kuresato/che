@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 import { CLASSES } from '../../inversify.types';
 import { DriverHelper } from '../../utils/DriverHelper';
 import { TestConstants } from '../../TestConstants';
-import { By } from 'selenium-webdriver';
+import { By, Key } from 'selenium-webdriver';
 import { Logger } from '../../utils/Logger';
 
 /*********************************************************************
@@ -36,8 +36,7 @@ export class QuickOpenContainer {
     public async clickOnContainerItem(itemText: string, timeout: number = TestConstants.TS_SELENIUM_DEFAULT_TIMEOUT) {
         Logger.debug(`QuickOpenContainer.clickOnContainerItem "${itemText}"`);
 
-        const quickContainerItemLocator: By = By.xpath(`//div[@class='quick-open-entry']//span[text()='${itemText}']`);
-
+        const quickContainerItemLocator: By = By.css(`div[aria-label="${itemText}, picker"]`);
         await this.waitContainer(timeout);
         await this.driverHelper.waitAndClick(quickContainerItemLocator, timeout);
         await this.waitContainerDisappearance();
@@ -45,8 +44,17 @@ export class QuickOpenContainer {
 
     public async type(text: string) {
         Logger.debug(`QuickOpenContainer.type "${text}"`);
-
         await this.driverHelper.enterValue(By.css('.quick-open-input input'), text);
+    }
+
+    public async invokeByHotKey(timeout: number = TestConstants.TS_SELENIUM_DEFAULT_TIMEOUT) {
+        await this.driverHelper.getDriver().actions().sendKeys(Key.F1).perform();
+        await this.waitContainer(timeout);
+    }
+
+    public async typeAndSelectSuggestion(text: string, suggestedText: string) {
+        await this.driverHelper.type(By.css('div.monaco-inputbox  input.input'), text);
+        await this.clickOnContainerItem(suggestedText);
     }
 
 }
