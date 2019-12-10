@@ -48,6 +48,7 @@ export class QuickOpenContainer {
     }
 
     public async invokeByHotKey(timeout: number = TestConstants.TS_SELENIUM_DEFAULT_TIMEOUT) {
+        Logger.debug('QuickOpenContainer.invokeByHotKey');
         await this.driverHelper.getDriver().actions().sendKeys(Key.F1).perform();
         await this.waitContainer(timeout);
     }
@@ -56,5 +57,7 @@ export class QuickOpenContainer {
         await this.driverHelper.type(By.css('div.monaco-inputbox  input.input'), text);
         await this.clickOnContainerItem(suggestedText);
     }
+
+
 
 }

@@ -3,5 +3,5 @@
 -u tdd 
 --bail
 --full-trace
---spec dist/tests/e2e_happy_path/HappyPath.spec.js
+--spec dist/tests/e2e_happy_path/HappyPath.spec.copy.js
 --require source-map-support/register

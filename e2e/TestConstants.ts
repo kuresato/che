@@ -192,5 +192,11 @@ export const TestConstants = {
     /**
      * Log level settings, possible variants: 'INFO' (by default), 'DEBUG', 'TRACE'.
      */
-    TS_SELENIUM_LOG_LEVEL: process.env.TS_SELENIUM_LOG_LEVEL || 'INFO'
+    TS_SELENIUM_LOG_LEVEL: process.env.TS_SELENIUM_LOG_LEVEL || 'DEBUG',
+
+
+   /**
+    * The github Personal acccess token 
+    */
+    TS_GITHUB_PERSONAL_ACCESS_TOKEN: process.env.TS_GITHUB_PERSONAL_ACCESS_TOKEN || ''
 };
