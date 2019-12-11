@@ -54,6 +54,7 @@ build_and_deploy_artifacts() {
 }
 
 releaseProject() {
+    #test
     CUR_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
     TAG = $(echo $CUR_VERSION | cut -d'-' -f1) #cut SNAPSHOT form the version name
     echo -e "\x1B[92m############### Release: $TAG\x1B[0m"
