@@ -196,7 +196,7 @@ export const TestConstants = {
 
 
    /**
-    * The github Personal acccess token 
+    * The github Personal acccess token
     */
     TS_GITHUB_PERSONAL_ACCESS_TOKEN: process.env.TS_GITHUB_PERSONAL_ACCESS_TOKEN || ''
 };

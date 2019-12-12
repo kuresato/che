@@ -39,7 +39,9 @@ const CLASSES = {
     OcpWebConsolePage: 'OcpWebConsolePage',
     OpenWorkspaceWidget: 'OpenWorkspaceWidget',
     ContextMenu: 'ContextMenu',
-    GitHubUtils: 'GitHubUtils'
+    GitHubUtils: 'GitHubUtils',
+    KeyCloakUtils: 'KeyCloakUtils',
+    CheGitApi: 'CheGitApi'
 };
 
 export { TYPES, CLASSES };
