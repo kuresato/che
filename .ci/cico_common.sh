@@ -47,7 +47,7 @@ install_deps(){
 
 build_and_deploy_artifacts() {
     set -x
-    scl enable rh-maven33 'mvn clean install -U'
+    scl enable rh-maven33 'mvn -T 4 clean install -U -Pintegration'
     if [ $? -eq 0 ]; then
         echo 'Build Success!'
         echo 'Going to deploy artifacts'
