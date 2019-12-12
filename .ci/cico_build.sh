@@ -12,7 +12,7 @@
 # this script assumes its being run on CentOS Linux 7/x86_64
 
 #include common scripts
-. cico_common.sh
+. ./.ci/cico_common.sh
 
 load_jenkins_vars
 load_mvn_settings_gpg_key
