@@ -17,7 +17,9 @@ load_jenkins_vars() {
                               CHE_BOT_GITHUB_TOKEN \
                               CHE_MAVEN_SETTINGS \
                               CHE_OSS_SONATYPE_GPG_KEY \
-                              CHE_OSS_SONATYPE_PASSPHRASE)"
+                              CHE_OSS_SONATYPE_PASSPHRASE \
+                              QUAY_ECLIPSE_CHE_USERNAME \
+                              QUAY_ECLIPSE_CHE_PASSWORD)"
 }
 
 load_mvn_settings_gpg_key() {
@@ -65,4 +67,87 @@ releaseProject() {
     TAG = $(echo $CUR_VERSION | cut -d'-' -f1) #cut SNAPSHOT form the version name
     echo -e "\x1B[92m############### Release: $TAG\x1B[0m"
     mvn release:prepare release:perform -B -Dresume=false -Dtag=$TAG -DreleaseVersion=$TAG "-Darguments=-DskipTests=true -Dskip-validate-sources -Dgpg.passphrase=$CHE_OSS_SONATYPE_PASSPHRASE -Darchetype.test.skip=true -Dversion.animal-sniffer.enforcer-rule=1.16"
+}
+
+
+publishImagesOnQuay() {
+
+    echo "Going to build and push docker images"
+    set -e
+    set -o pipefail
+
+    REGISTRY="quay.io"
+    ORGANIZATION="eclipse"
+    # For pushing to quay.io 'eclipse' organization we need to use different credentials
+    QUAY_USERNAME=${QUAY_ECLIPSE_CHE_USERNAME}
+    QUAY_PASSWORD=${QUAY_ECLIPSE_CHE_PASSWORD}
+    if [ -n "${QUAY_USERNAME}" ] && [ -n "${QUAY_PASSWORD}" ]; then
+        docker login -u "${QUAY_USERNAME}" -p "${QUAY_PASSWORD}" "${REGISTRY}"
+    else
+      echo "Could not login, missing credentials for pushing to the '${ORGANIZATION}' organization"
+      return
+    fi
+
+    # stop / rm all containers
+    if [[ $(docker ps -aq) != "" ]];then
+        docker rm -f $(docker ps -aq)
+    fi
+
+    # KEEP RIGHT ORDER!!!
+    DOCKER_FILES_LOCATIONS=(
+    dockerfiles/endpoint-watcher
+    dockerfiles/keycloak
+    dockerfiles/postgres
+    dockerfiles/dev
+    dockerfiles/che
+    dockerfiles/dashboard-dev
+    dockerfiles/e2e
+    )
+
+    IMAGES_LIST=(
+    eclipse/che-endpoint-watcher
+    eclipse/che-keycloak
+    eclipse/che-postgres
+    eclipse/che-dev
+    eclipse/che-server
+    eclipse/che-dashboard-dev
+    eclipse/che-e2e
+    )
+
+
+    # BUILD IMAGES
+    for image_dir in ${DOCKER_FILES_LOCATIONS[@]}
+     do
+         bash $(pwd)/$image_dir/build.sh
+         if [ $image_dir == "dockerfiles/che" ]; then
+           #CENTOS SINGLE USER
+           BUILD_ASSEMBLY_DIR=$(echo assembly/assembly-main/target/eclipse-che-*/eclipse-che-*/)
+           LOCAL_ASSEMBLY_DIR="$image_dir/eclipse-che"
+           if [ -d "${LOCAL_ASSEMBLY_DIR}" ]; then
+               rm -r "${LOCAL_ASSEMBLY_DIR}"
+           fi
+           cp -r "${BUILD_ASSEMBLY_DIR}" "${LOCAL_ASSEMBLY_DIR}"
+           docker build -t ${ORGANIZATION}/che-server:nightly-centos -f $(pwd)/$image_dir/Dockerfile.centos $(pwd)/$image_dir/
+         fi
+         if [ $? -ne 0 ]; then
+           echo "ERROR:"
+           echo "build of '$image_dir' image is failed!"
+           exit 1
+         fi
+     done
+
+    #PUSH IMAGES
+    for image in ${IMAGES_LIST[@]}
+     do
+         echo y | docker push "${REGISTRY}/${image}:nightly"
+         if [ $image == "${ORGANIZATION}/che-server" ]; then
+           echo y | docker push "${REGISTRY}/${ORGANIZATION}/che-server:nightly-centos"
+         fi
+         if [ $? -ne 0 ]; then
+           echo "ERROR:"
+           echo "docker push of '$image' image is failed!"
+           exit 1
+         fi
+     done
+
 }
