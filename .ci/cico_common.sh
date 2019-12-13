@@ -138,8 +138,10 @@ publishImagesOnQuay() {
     #PUSH IMAGES
     for image in ${IMAGES_LIST[@]}
      do
+         docker tag "${image}:nightly" "${REGISTRY}/${image}:nightly"
          echo y | docker push "${REGISTRY}/${image}:nightly"
          if [ $image == "${ORGANIZATION}/che-server" ]; then
+           docker tag "${image}:nightly" "${REGISTRY}/${image}:nightly-centos"
            echo y | docker push "${REGISTRY}/${ORGANIZATION}/che-server:nightly-centos"
          fi
          if [ $? -ne 0 ]; then
