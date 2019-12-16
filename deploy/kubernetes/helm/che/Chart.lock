@@ -1,0 +1,24 @@
+dependencies:
+- name: che-devfile-registry
+  repository: file://./custom-charts/che-devfile-registry/
+  version: 0.0.1
+- name: che-plugin-registry
+  repository: file://./custom-charts/che-plugin-registry/
+  version: 0.0.1
+- name: che-postgres
+  repository: file://./custom-charts/che-postgres/
+  version: 1.0.0
+- name: che-keycloak
+  repository: file://./custom-charts/che-keycloak/
+  version: 1.0.0
+- name: che-jaeger
+  repository: file://./custom-charts/che-jaeger
+  version: 1.0.0
+- name: prometheus
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 7.4.6
+- name: grafana
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 1.26.1
+digest: sha256:297762efb563d05b4c332485cd0704f495bc5fdaf1ad8f1f986d1909207f6f9f
+generated: "2019-12-16T09:23:38.384520078Z"

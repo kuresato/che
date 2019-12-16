@@ -10,7 +10,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: che-ingress
+  name: keycloak-ingress
 {{- if .Values.global.ingressAnnotations }}
   annotations:
 {{ toYaml .Values.global.ingressAnnotations | indent 4 }}
@@ -19,18 +19,25 @@ spec:
 {{- if .Values.global.tls.enabled }}
   tls:
   - hosts:
-    - {{ template "cheHost" . }}
+    - {{ template "keycloakHost" . }}
     secretName: {{ .Values.global.tls.secretName }}
 {{- end }}
   rules:
-{{- if ne .Values.global.serverStrategy "default-host" }}
-  - host: {{ template "cheHost" . }}
-    http:
-{{- else }}
+{{- if eq .Values.global.serverStrategy "default-host" }}
   - http:
-{{- end }}
+      paths:
+      - path: /auth/
+{{- else if eq .Values.global.serverStrategy "single-host" }}
+  - host: {{ template "keycloakHost" . }}
+    http:
+      paths:
+      - path: /auth/
+{{- else }}
+  - host: {{ template "keycloakHost" . }}
+    http:
       paths:
       - path: /
+{{- end }}
         backend:
-          serviceName: che-host
-          servicePort: 8080
+          serviceName: keycloak
+          servicePort: 5050

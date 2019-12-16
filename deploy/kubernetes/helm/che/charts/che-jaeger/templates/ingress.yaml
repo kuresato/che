@@ -1,16 +1,19 @@
 #
-# Copyright (c) 2012-2019 Red Hat, Inc.
+# Copyright (c) 2012-2018 Red Hat, Inc.
 # This program and the accompanying materials are made
 # available under the terms of the Eclipse Public License 2.0
 # which is available at https://www.eclipse.org/legal/epl-2.0/
 #
 # SPDX-License-Identifier: EPL-2.0
 #
+{{- define "jaegerHost" }}
+{{- printf "jaeger-%s.%s" .Release.Namespace .Values.global.ingressDomain }}
+{{- end }}
 
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: che-ingress
+  name: jaeger-query
 {{- if .Values.global.ingressAnnotations }}
   annotations:
 {{ toYaml .Values.global.ingressAnnotations | indent 4 }}
@@ -19,18 +22,14 @@ spec:
 {{- if .Values.global.tls.enabled }}
   tls:
   - hosts:
-    - {{ template "cheHost" . }}
+    - {{ template "jaegerHost" . }}
     secretName: {{ .Values.global.tls.secretName }}
 {{- end }}
   rules:
-{{- if ne .Values.global.serverStrategy "default-host" }}
-  - host: {{ template "cheHost" . }}
+  - host: {{ template "jaegerHost" . }}
     http:
-{{- else }}
-  - http:
-{{- end }}
       paths:
-      - path: /
-        backend:
-          serviceName: che-host
-          servicePort: 8080
+        - path: /
+          backend:
+              serviceName: jaeger-query
+              servicePort: 16686

@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Jaeger Helm chart, used by Che
+name: che-jaeger
+version: 1.0.0
