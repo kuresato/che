@@ -20,7 +20,7 @@ spec:
   - host: {{ printf .Values.global.chePluginRegistryUrlFormat .Release.Namespace .Values.global.ingressDomain }}
     http:
       paths:
-      - path: /
+      - path: /*
         backend:
           serviceName: plugin-registry
           servicePort: 8080
@@ -28,5 +28,5 @@ spec:
   tls:
   - hosts:
     - {{ printf .Values.global.chePluginRegistryUrlFormat .Release.Namespace .Values.global.ingressDomain }}
-    secretName: {{ .Values.global.tls.secretName }}
+#   secretName: {{ .Values.global.tls.secretName }}
 {{- end -}}

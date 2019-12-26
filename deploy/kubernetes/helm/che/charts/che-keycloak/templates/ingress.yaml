@@ -20,23 +20,23 @@ spec:
   tls:
   - hosts:
     - {{ template "keycloakHost" . }}
-    secretName: {{ .Values.global.tls.secretName }}
+#   secretName: {{ .Values.global.tls.secretName }}
 {{- end }}
   rules:
 {{- if eq .Values.global.serverStrategy "default-host" }}
   - http:
       paths:
-      - path: /auth/
+      - path: /auth/*
 {{- else if eq .Values.global.serverStrategy "single-host" }}
   - host: {{ template "keycloakHost" . }}
     http:
       paths:
-      - path: /auth/
+      - path: /auth/*
 {{- else }}
   - host: {{ template "keycloakHost" . }}
     http:
       paths:
-      - path: /
+      - path: /*
 {{- end }}
         backend:
           serviceName: keycloak

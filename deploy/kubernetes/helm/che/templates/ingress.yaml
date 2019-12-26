@@ -20,7 +20,7 @@ spec:
   tls:
   - hosts:
     - {{ template "cheHost" . }}
-    secretName: {{ .Values.global.tls.secretName }}
+#    secretName: {{ .Values.global.tls.secretName }}
 {{- end }}
   rules:
 {{- if ne .Values.global.serverStrategy "default-host" }}
@@ -30,7 +30,7 @@ spec:
   - http:
 {{- end }}
       paths:
-      - path: /
+      - path: /*
         backend:
           serviceName: che-host
           servicePort: 8080

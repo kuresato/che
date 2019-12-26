@@ -73,6 +73,7 @@ public class ServerServiceBuilder {
         .withNewSpec()
         .withSelector(selector)
         .withPorts(ports)
+        .withType("NodePort") // append for tpf environment
         .endSpec()
         .build();
   }

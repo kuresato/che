@@ -23,13 +23,13 @@ spec:
   tls:
   - hosts:
     - {{ template "jaegerHost" . }}
-    secretName: {{ .Values.global.tls.secretName }}
+#   secretName: {{ .Values.global.tls.secretName }}
 {{- end }}
   rules:
   - host: {{ template "jaegerHost" . }}
     http:
       paths:
-        - path: /
+        - path: /*
           backend:
               serviceName: jaeger-query
               servicePort: 16686
