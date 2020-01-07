@@ -1,4 +1,0 @@
-apiVersion: v1
-description: A Helm chart for postgresql, used by Che
-name: che-postgres
-version: 1.0.0

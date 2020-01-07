@@ -1,4 +1,0 @@
-apiVersion: v1
-home: https://github.com/eclipse/che-plugin-registry/
-name: che-plugin-registry
-version: 0.0.1

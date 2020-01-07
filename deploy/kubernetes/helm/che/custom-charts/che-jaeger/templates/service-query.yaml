@@ -22,3 +22,6 @@ spec:
     targetPort: 16686
   selector:
     jaeger-infra: jaeger-pod
+{{- if .Values.global.serviceType }}
+  type: {{.Values.global.serviceType}}
+{{- end }}

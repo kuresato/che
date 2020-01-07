@@ -18,5 +18,6 @@ spec:
     targetPort: 8080
   selector:
     io.kompose.service: keycloak
-status:
-  loadBalancer: {}
+{{- if .Values.global.serviceType }}
+  type: {{.Values.global.serviceType}}
+{{- end }}

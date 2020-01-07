@@ -1,2 +1,0 @@
-image: eclipse/che-keycloak:nightly
-requireAdminPasswordChange: true

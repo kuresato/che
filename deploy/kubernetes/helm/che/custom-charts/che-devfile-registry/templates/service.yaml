@@ -22,3 +22,6 @@ spec:
   selector:
     app: che
     component: devfile-registry
+{{- if .Values.global.serviceType }}
+  type: {{.Values.global.serviceType}}
+{{- end }}

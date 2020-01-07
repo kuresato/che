@@ -11,14 +11,16 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: devfile-registry
+{{- if .Values.global.ingressAnnotations }}
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+{{ toYaml .Values.global.ingressAnnotations | indent 4 }}
+{{- end }}
 spec:
   rules:
   - host: {{ printf .Values.global.cheDevfileRegistryUrlFormat .Release.Namespace .Values.global.ingressDomain }}
     http:
       paths:
-      - path: /
+      - path: /*
         backend:
           serviceName: devfile-registry
           servicePort: 8080
@@ -26,5 +28,7 @@ spec:
   tls:
   - hosts:
     - {{ printf .Values.global.cheDevfileRegistryUrlFormat .Release.Namespace .Values.global.ingressDomain }}
+{{- if .Values.global.tls.secretName }}
     secretName: {{ .Values.global.tls.secretName }}
+{{- end -}}
 {{- end -}}
