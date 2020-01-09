@@ -15,3 +15,9 @@ global:
 #cheImage: eclipse/che-server:7.5.1
 cheImage: kuresato/che-server:nightly
 
+#with TLS
+#wsIngressAnnotation: '{"kubernetes.io/ingress.class": "nginx", "kubernetes.io/tls-acme": "true", "{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/rewrite-target": "/$1","{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/ssl-redirect": "true","{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/proxy-connect-timeout": "3600","{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/proxy-read-timeout": "3600"}'
+#without TLS
+#wsIngressAnnotation: '{"kubernetes.io/ingress.class": "nginx", "{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/rewrite-target": "/$1","{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/ssl-redirect": "false","{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/proxy-connect-timeout": "3600","{{ .Values.global.ingressAnnotationsPrefix }}ingress.kubernetes.io/proxy-read-timeout": "3600"}'
+#aws
+wsIngressAnnotation: '{"kubernetes.io/ingress.class": "alb", "alb.ingress.kubernetes.io/certificate-arn": "arn:aws:acm:ap-northeast-1:428151594215:certificate/e5a9a375-2510-4e29-84e2-399d5d168ab5", "alb.ingress.kubernetes.io/scheme": "internet-facing", "alb.ingress.kubernetes.io/security-groups": "tpf-chteval-eks-alb"}'
