@@ -9,6 +9,7 @@ global:
   ingressDomain: chteval.tpf.name
   tls:
     enabled: true
+    secretName: ""
   cheWorkspacesNamespace: che
   multiuser: true
 
