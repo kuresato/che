@@ -58,4 +58,5 @@ spec:
           limits:
             memory: {{ .Values.chePluginRegistry.memoryLimit }}
           requests:
+            cpu: {{ .Values.chePluginRegistry.cpuRequests }}
             memory: {{ .Values.chePluginRegistry.memoryRequests }}

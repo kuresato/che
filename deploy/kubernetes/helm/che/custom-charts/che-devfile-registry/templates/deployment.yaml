@@ -58,4 +58,5 @@ spec:
           limits:
             memory: {{ .Values.cheDevfileRegistry.memoryLimit }}
           requests:
+            cpu: {{ .Values.cheDevfileRegistry.cpuRequests }}
             memory: {{ .Values.cheDevfileRegistry.memoryRequests }}

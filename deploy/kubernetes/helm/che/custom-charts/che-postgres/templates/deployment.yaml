@@ -79,7 +79,10 @@ spec:
           timeoutSeconds: 1
         ports:
         - containerPort: 5432
-        resources: {}
+        resources:
+          requests:
+            cpu: {{ .Values.chePostgres.cpuRequests }}
+            memory: {{ .Values.chePostgres.memoryRequests }}
         volumeMounts:
         - mountPath: /var/lib/pgsql/data
           name: postgres-data
